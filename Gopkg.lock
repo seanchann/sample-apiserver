@@ -447,7 +447,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:088c77c46575af64242d3c09b96465c5d27e13f48259334086f85ed72f4be28a"
+  digest = "1:ff38e5f3fb7d095073718d74206f510cc4202fd16bdcd47a4741e028ba07deda"
   name = "github.com/seanchann/apimaster"
   packages = [
     "pkg/api/legacyscheme",
@@ -462,11 +462,13 @@
     "pkg/apiserver/options",
     "pkg/apiserver/server",
     "pkg/auth/authorizer/abac",
+    "pkg/swaggerdoc",
+    "pkg/swaggerdoc/options",
     "plugin/pkg/admission/admit",
     "plugin/pkg/admission/deny",
   ]
   pruneopts = "UT"
-  revision = "0e98b79879595775ce2c52744ad1d66eeee77eea"
+  revision = "46e0ea02bc75f7307358dec2cbf8157a28de23a9"
 
 [[projects]]
   digest = "1:3ae83d49a57fde8c5a4c035598030e3d3300384cadea9ea15195ba7fda58eef4"
@@ -891,10 +893,11 @@
   revision = "850c31c762a4bd730ed750fa0a2e1810b7f8d33d"
 
 [[projects]]
-  digest = "1:f5d5faa9b62553177c6ed1f4bf4aa7081c5d45b3f763a5278b9511c51b2ac94d"
+  digest = "1:8d05e415c2dc8fc70df72435245578fb40573d8a93601d9412ff6cd9bc40e240"
   name = "k8s.io/client-go"
   packages = [
     "discovery",
+    "discovery/fake",
     "informers",
     "informers/admissionregistration",
     "informers/admissionregistration/v1alpha1",
@@ -1004,6 +1007,7 @@
     "plugin/pkg/client/auth/openstack",
     "rest",
     "rest/watch",
+    "testing",
     "third_party/forked/golang/template",
     "tools/auth",
     "tools/cache",
@@ -1052,15 +1056,22 @@
     "github.com/seanchann/apimaster/pkg/apiserver",
     "github.com/seanchann/apimaster/pkg/apiserver/options",
     "github.com/seanchann/apimaster/pkg/apiserver/server",
+    "github.com/seanchann/apimaster/pkg/swaggerdoc",
+    "github.com/seanchann/apimaster/pkg/swaggerdoc/options",
     "github.com/spf13/cobra",
     "github.com/spf13/pflag",
+    "k8s.io/apimachinery/pkg/api/errors",
     "k8s.io/apimachinery/pkg/api/testing/roundtrip",
     "k8s.io/apimachinery/pkg/apis/meta/v1",
+    "k8s.io/apimachinery/pkg/conversion",
+    "k8s.io/apimachinery/pkg/labels",
     "k8s.io/apimachinery/pkg/runtime",
     "k8s.io/apimachinery/pkg/runtime/schema",
     "k8s.io/apimachinery/pkg/runtime/serializer",
+    "k8s.io/apimachinery/pkg/types",
     "k8s.io/apimachinery/pkg/util/errors",
     "k8s.io/apimachinery/pkg/util/runtime",
+    "k8s.io/apimachinery/pkg/watch",
     "k8s.io/apiserver/pkg/registry/generic",
     "k8s.io/apiserver/pkg/registry/rest",
     "k8s.io/apiserver/pkg/server",
@@ -1069,8 +1080,14 @@
     "k8s.io/apiserver/pkg/storage/storagebackend",
     "k8s.io/apiserver/pkg/util/flag",
     "k8s.io/apiserver/pkg/util/logs",
+    "k8s.io/client-go/discovery",
+    "k8s.io/client-go/discovery/fake",
     "k8s.io/client-go/informers",
     "k8s.io/client-go/kubernetes",
+    "k8s.io/client-go/rest",
+    "k8s.io/client-go/testing",
+    "k8s.io/client-go/tools/cache",
+    "k8s.io/client-go/util/flowcontrol",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

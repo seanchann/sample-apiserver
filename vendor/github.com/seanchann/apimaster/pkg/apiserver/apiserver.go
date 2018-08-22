@@ -9,6 +9,14 @@ import (
 	"k8s.io/client-go/informers"
 )
 
+//ControllerProviderConfig controller provider config
+//this call before install api
+type ControllerProviderConfig struct {
+	NewFunc         func() error
+	PostStartFunc   genericapiserver.PostStartHookFunc
+	PreShutdownFunc genericapiserver.PreShutdownHookFunc
+}
+
 //ExtraConfig user configure
 type ExtraConfig struct {
 	APIResourceConfigSource serverstorage.APIResourceConfigSource
@@ -16,6 +24,9 @@ type ExtraConfig struct {
 
 	//RESTStorageProviders list. will be install this api.
 	RESTStorageProviders []RESTStorageProvider
+
+	//ControllerConfig config a controller
+	ControllerConfig ControllerProviderConfig
 }
 
 //Config master config
@@ -66,9 +77,14 @@ func (c completedConfig) New(delegateAPIServer genericapiserver.DelegationTarget
 		GenericAPIServer: genericServer,
 	}
 
-	gm.InstallAPIs(c.ExtraConfig.APIResourceConfigSource, c.GenericConfig.RESTOptionsGetter, c.ExtraConfig.RESTStorageProviders...)
+	//add user config hook first
+	if nil == c.ExtraConfig.ControllerConfig.NewFunc() {
+		controllerName := "extra-user-controller"
+		m.GenericAPIServer.AddPostStartHookOrDie(controllerName, c.ExtraConfig.ControllerConfig.PostStartFunc)
+		m.GenericAPIServer.AddPreShutdownHookOrDie(controllerName, c.ExtraConfig.ControllerConfig.PreShutdownFunc)
+	}
 
-	//m.GenericAPIServer.AddPostStartHookOrDie()
+	gm.InstallAPIs(c.ExtraConfig.APIResourceConfigSource, c.GenericConfig.RESTOptionsGetter, c.ExtraConfig.RESTStorageProviders...)
 
 	return gm, nil
 }
