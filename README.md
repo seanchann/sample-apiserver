@@ -25,7 +25,7 @@ openssl pkcs12 -export -in ./client.crt -inkey ./client.key -out client.p12 -pas
 4. 放置前面生成的证书在合适的位置，然后启动服务
 
 ```shell
-sample-apiserver --insecure-bind-address="127.0.0.1" --insecure-port=8080 \
+go run cmd/sample-apiserver/main.go --insecure-bind-address="127.0.0.1" --insecure-port=8080 \
   --secure-port=8443 --tls-private-key-file="~/keys/ca.key" --tls-cert-file="~/keys/ca.crt" \
   --enable-swagger-ui=true  --swagger-ui-file-path="./third_party/swagger-ui"
 ```
