@@ -9,12 +9,20 @@ import (
 	"k8s.io/client-go/informers"
 )
 
+//ControllerProvider new custom controller and return this
+type ControllerProvider struct {
+	NameFunc        func() string
+	PostFunc        genericapiserver.PostStartHookFunc
+	PreShutdownFunc genericapiserver.PreShutdownHookFunc
+}
+
 //ControllerProviderConfig controller provider config
 //this call before install api
 type ControllerProviderConfig struct {
-	NewFunc         func() error
-	PostStartFunc   genericapiserver.PostStartHookFunc
-	PreShutdownFunc genericapiserver.PreShutdownHookFunc
+	//NewParameters user input parameter and apimaster input parameter
+	//these all use with NewFunc
+	NewParameters []interface{}
+	NewFunc       func(para []interface{}) (*ControllerProvider, error)
 }
 
 //ExtraConfig user configure
@@ -78,10 +86,10 @@ func (c completedConfig) New(delegateAPIServer genericapiserver.DelegationTarget
 	}
 
 	//add user config hook first
-	if nil == c.ExtraConfig.ControllerConfig.NewFunc() {
-		controllerName := "extra-user-controller"
-		m.GenericAPIServer.AddPostStartHookOrDie(controllerName, c.ExtraConfig.ControllerConfig.PostStartFunc)
-		m.GenericAPIServer.AddPreShutdownHookOrDie(controllerName, c.ExtraConfig.ControllerConfig.PreShutdownFunc)
+	if provider, err := c.ExtraConfig.ControllerConfig.NewFunc(c.ExtraConfig.ControllerConfig.NewParameters); err != nil {
+		controllerName := provider.NameFunc()
+		gm.GenericAPIServer.AddPostStartHookOrDie(controllerName, provider.PostFunc)
+		gm.GenericAPIServer.AddPreShutdownHookOrDie(controllerName, provider.PreShutdownFunc)
 	}
 
 	gm.InstallAPIs(c.ExtraConfig.APIResourceConfigSource, c.GenericConfig.RESTOptionsGetter, c.ExtraConfig.RESTStorageProviders...)

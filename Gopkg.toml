@@ -23,6 +23,10 @@
 #   non-go = false
 #   go-tests = true
 #   unused-packages = true
+# [[constraint]]
+#   branch = "master"
+#   name = ""
+# required = ["k8s.io/code-generator"]
 
 
 [[constraint]]
@@ -46,16 +50,21 @@
   version = "1.0.1"
 
 [[constraint]]
-  branch = "release-1.10"
+  branch = "release-1.11"
   name = "k8s.io/apimachinery"
 
 [[constraint]]
-  branch = "master"
+  branch = "release-1.11"
   name = "k8s.io/apiserver"
+  source = "github.com/seanchann/apiserver"
 
 [[constraint]]
   name = "k8s.io/client-go"
-  version = "8.0.0"
+  version = "kubernetes-1.11.2"
+
+# [[constraint]]
+#   version = "kubernetes-1.11.2"
+#   name = "k8s.io/code-generator"
 
 [prune]
   go-tests = true

@@ -274,7 +274,7 @@ func (s *DelegatingAuthenticationOptions) getRequestHeader() (*RequestHeaderAuth
 func (s *DelegatingAuthenticationOptions) lookupInClusterClientCA() (*ClientCertAuthenticationOptions, error) {
 	clientConfig, err := s.getClientConfig()
 	if err != nil {
-		return nil, fmt.Errorf("failed to get delegated authentication kubeconfig: %v", err)
+		return nil, err
 	}
 	client, err := coreclient.NewForConfig(clientConfig)
 	if err != nil {

@@ -58,9 +58,7 @@ func NewClientManager() (ClientManager, error) {
 		return ClientManager{}, err
 	}
 	admissionScheme := runtime.NewScheme()
-	if err := admissionv1beta1.AddToScheme(admissionScheme); err != nil {
-		return ClientManager{}, err
-	}
+	admissionv1beta1.AddToScheme(admissionScheme)
 	return ClientManager{
 		cache: cache,
 		negotiatedSerializer: serializer.NegotiatedSerializerWrapper(runtime.SerializerInfo{
