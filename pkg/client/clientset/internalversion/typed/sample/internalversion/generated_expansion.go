@@ -13,3 +13,5 @@ See docs/ for more information about the  project.
 package internalversion
 
 type TestExpansion interface{}
+
+type UserExpansion interface{}

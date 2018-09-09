@@ -20,6 +20,8 @@ import (
 type Interface interface {
 	// Tests returns a TestInformer.
 	Tests() TestInformer
+	// Users returns a UserInformer.
+	Users() UserInformer
 }
 
 type version struct {
@@ -36,4 +38,9 @@ func New(f internalinterfaces.SharedInformerFactory, namespace string, tweakList
 // Tests returns a TestInformer.
 func (v *version) Tests() TestInformer {
 	return &testInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
+}
+
+// Users returns a UserInformer.
+func (v *version) Users() UserInformer {
+	return &userInformer{factory: v.factory, namespace: v.namespace, tweakListOptions: v.tweakListOptions}
 }

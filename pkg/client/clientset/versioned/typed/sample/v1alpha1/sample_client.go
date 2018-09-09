@@ -22,6 +22,7 @@ import (
 type SampleV1alpha1Interface interface {
 	RESTClient() rest.Interface
 	TestsGetter
+	UsersGetter
 }
 
 // SampleV1alpha1Client is used to interact with features provided by the sample group.
@@ -31,6 +32,10 @@ type SampleV1alpha1Client struct {
 
 func (c *SampleV1alpha1Client) Tests(namespace string) TestInterface {
 	return newTests(c, namespace)
+}
+
+func (c *SampleV1alpha1Client) Users(namespace string) UserInterface {
+	return newUsers(c, namespace)
 }
 
 // NewForConfig creates a new SampleV1alpha1Client for the given config.

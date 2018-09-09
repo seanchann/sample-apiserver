@@ -25,59 +25,59 @@ import (
 	cache "k8s.io/client-go/tools/cache"
 )
 
-// TestInformer provides access to a shared informer and lister for
-// Tests.
-type TestInformer interface {
+// UserInformer provides access to a shared informer and lister for
+// Users.
+type UserInformer interface {
 	Informer() cache.SharedIndexInformer
-	Lister() internalversion.TestLister
+	Lister() internalversion.UserLister
 }
 
-type testInformer struct {
+type userInformer struct {
 	factory          internalinterfaces.SharedInformerFactory
 	tweakListOptions internalinterfaces.TweakListOptionsFunc
 	namespace        string
 }
 
-// NewTestInformer constructs a new informer for Test type.
+// NewUserInformer constructs a new informer for User type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewTestInformer(client clientset_internalversion.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
-	return NewFilteredTestInformer(client, namespace, resyncPeriod, indexers, nil)
+func NewUserInformer(client clientset_internalversion.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+	return NewFilteredUserInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
-// NewFilteredTestInformer constructs a new informer for Test type.
+// NewFilteredUserInformer constructs a new informer for User type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredTestInformer(client clientset_internalversion.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredUserInformer(client clientset_internalversion.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.Sample().Tests(namespace).List(options)
+				return client.Sample().Users(namespace).List(options)
 			},
 			WatchFunc: func(options v1.ListOptions) (watch.Interface, error) {
 				if tweakListOptions != nil {
 					tweakListOptions(&options)
 				}
-				return client.Sample().Tests(namespace).Watch(options)
+				return client.Sample().Users(namespace).Watch(options)
 			},
 		},
-		&sample.Test{},
+		&sample.User{},
 		resyncPeriod,
 		indexers,
 	)
 }
 
-func (f *testInformer) defaultInformer(client clientset_internalversion.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
-	return NewFilteredTestInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
+func (f *userInformer) defaultInformer(client clientset_internalversion.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+	return NewFilteredUserInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
-func (f *testInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&sample.Test{}, f.defaultInformer)
+func (f *userInformer) Informer() cache.SharedIndexInformer {
+	return f.factory.InformerFor(&sample.User{}, f.defaultInformer)
 }
 
-func (f *testInformer) Lister() internalversion.TestLister {
-	return internalversion.NewTestLister(f.Informer().GetIndexer())
+func (f *userInformer) Lister() internalversion.UserLister {
+	return internalversion.NewUserLister(f.Informer().GetIndexer())
 }

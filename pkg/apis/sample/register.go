@@ -40,6 +40,8 @@ func addKnownTypes(scheme *runtime.Scheme) error {
 	scheme.AddKnownTypes(SchemeGroupVersion,
 		&Test{},
 		&TestList{},
+		&User{},
+		&UserList{},
 	)
 	return nil
 }

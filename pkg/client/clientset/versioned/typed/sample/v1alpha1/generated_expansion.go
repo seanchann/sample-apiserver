@@ -13,3 +13,5 @@ See docs/ for more information about the  project.
 package v1alpha1
 
 type TestExpansion interface{}
+
+type UserExpansion interface{}

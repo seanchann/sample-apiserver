@@ -26,6 +26,10 @@ func (c *FakeSample) Tests(namespace string) internalversion.TestInterface {
 	return &FakeTests{c, namespace}
 }
 
+func (c *FakeSample) Users(namespace string) internalversion.UserInterface {
+	return &FakeUsers{c, namespace}
+}
+
 // RESTClient returns a RESTClient that is used to communicate
 // with API server by this client implementation.
 func (c *FakeSample) RESTClient() rest.Interface {

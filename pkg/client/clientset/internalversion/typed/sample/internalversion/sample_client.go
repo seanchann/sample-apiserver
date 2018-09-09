@@ -20,6 +20,7 @@ import (
 type SampleInterface interface {
 	RESTClient() rest.Interface
 	TestsGetter
+	UsersGetter
 }
 
 // SampleClient is used to interact with features provided by the sample group.
@@ -29,6 +30,10 @@ type SampleClient struct {
 
 func (c *SampleClient) Tests(namespace string) TestInterface {
 	return newTests(c, namespace)
+}
+
+func (c *SampleClient) Users(namespace string) UserInterface {
+	return newUsers(c, namespace)
 }
 
 // NewForConfig creates a new SampleClient for the given config.
