@@ -31,3 +31,9 @@ go run cmd/sample-apiserver/main.go --insecure-bind-address="127.0.0.1" --insecu
 ```
 
 至此，你已经创建了一个`k8s`风格的API Server, 访问`127.0.0.1:8080`
+
+## 开发流程
+
+- 增加APIS
+- 调用`cd hack && ./update-codegen.sh`生成代码
+- 调用`cd hack && ./update-swagger-doc.sh`生成swagger文档
