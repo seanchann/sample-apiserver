@@ -15,7 +15,7 @@ package v1alpha1
 import (
 	time "time"
 
-	sample_v1alpha1 "github.com/seanchann/sample-apiserver/pkg/apis/sample/v1alpha1"
+	samplev1alpha1 "github.com/seanchann/sample-apiserver/pkg/apis/sample/v1alpha1"
 	versioned "github.com/seanchann/sample-apiserver/pkg/client/clientset/versioned"
 	internalinterfaces "github.com/seanchann/sample-apiserver/pkg/client/informers/externalversions/internalinterfaces"
 	v1alpha1 "github.com/seanchann/sample-apiserver/pkg/client/listers/sample/v1alpha1"
@@ -64,7 +64,7 @@ func NewFilteredUserInformer(client versioned.Interface, namespace string, resyn
 				return client.SampleV1alpha1().Users(namespace).Watch(options)
 			},
 		},
-		&sample_v1alpha1.User{},
+		&samplev1alpha1.User{},
 		resyncPeriod,
 		indexers,
 	)
@@ -75,7 +75,7 @@ func (f *userInformer) defaultInformer(client versioned.Interface, resyncPeriod 
 }
 
 func (f *userInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&sample_v1alpha1.User{}, f.defaultInformer)
+	return f.factory.InformerFor(&samplev1alpha1.User{}, f.defaultInformer)
 }
 
 func (f *userInformer) Lister() v1alpha1.UserLister {

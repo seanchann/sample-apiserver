@@ -15,7 +15,7 @@ package v1alpha1
 import (
 	time "time"
 
-	sample_v1alpha1 "github.com/seanchann/sample-apiserver/pkg/apis/sample/v1alpha1"
+	samplev1alpha1 "github.com/seanchann/sample-apiserver/pkg/apis/sample/v1alpha1"
 	versioned "github.com/seanchann/sample-apiserver/pkg/client/clientset/versioned"
 	internalinterfaces "github.com/seanchann/sample-apiserver/pkg/client/informers/externalversions/internalinterfaces"
 	v1alpha1 "github.com/seanchann/sample-apiserver/pkg/client/listers/sample/v1alpha1"
@@ -64,7 +64,7 @@ func NewFilteredTestInformer(client versioned.Interface, namespace string, resyn
 				return client.SampleV1alpha1().Tests(namespace).Watch(options)
 			},
 		},
-		&sample_v1alpha1.Test{},
+		&samplev1alpha1.Test{},
 		resyncPeriod,
 		indexers,
 	)
@@ -75,7 +75,7 @@ func (f *testInformer) defaultInformer(client versioned.Interface, resyncPeriod 
 }
 
 func (f *testInformer) Informer() cache.SharedIndexInformer {
-	return f.factory.InformerFor(&sample_v1alpha1.Test{}, f.defaultInformer)
+	return f.factory.InformerFor(&samplev1alpha1.Test{}, f.defaultInformer)
 }
 
 func (f *testInformer) Lister() v1alpha1.TestLister {

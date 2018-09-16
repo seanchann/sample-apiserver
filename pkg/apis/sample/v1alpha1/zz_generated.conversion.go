@@ -28,21 +28,68 @@ func init() {
 
 // RegisterConversions adds conversion functions to the given scheme.
 // Public to allow building arbitrary schemes.
-func RegisterConversions(scheme *runtime.Scheme) error {
-	return scheme.AddGeneratedConversionFuncs(
-		Convert_v1alpha1_Test_To_sample_Test,
-		Convert_sample_Test_To_v1alpha1_Test,
-		Convert_v1alpha1_TestList_To_sample_TestList,
-		Convert_sample_TestList_To_v1alpha1_TestList,
-		Convert_v1alpha1_TestSpec_To_sample_TestSpec,
-		Convert_sample_TestSpec_To_v1alpha1_TestSpec,
-		Convert_v1alpha1_User_To_sample_User,
-		Convert_sample_User_To_v1alpha1_User,
-		Convert_v1alpha1_UserList_To_sample_UserList,
-		Convert_sample_UserList_To_v1alpha1_UserList,
-		Convert_v1alpha1_UserSpec_To_sample_UserSpec,
-		Convert_sample_UserSpec_To_v1alpha1_UserSpec,
-	)
+func RegisterConversions(s *runtime.Scheme) error {
+	if err := s.AddGeneratedConversionFunc((*Test)(nil), (*sample.Test)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1alpha1_Test_To_sample_Test(a.(*Test), b.(*sample.Test), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*sample.Test)(nil), (*Test)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_sample_Test_To_v1alpha1_Test(a.(*sample.Test), b.(*Test), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*TestList)(nil), (*sample.TestList)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1alpha1_TestList_To_sample_TestList(a.(*TestList), b.(*sample.TestList), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*sample.TestList)(nil), (*TestList)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_sample_TestList_To_v1alpha1_TestList(a.(*sample.TestList), b.(*TestList), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*TestSpec)(nil), (*sample.TestSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1alpha1_TestSpec_To_sample_TestSpec(a.(*TestSpec), b.(*sample.TestSpec), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*sample.TestSpec)(nil), (*TestSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_sample_TestSpec_To_v1alpha1_TestSpec(a.(*sample.TestSpec), b.(*TestSpec), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*User)(nil), (*sample.User)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1alpha1_User_To_sample_User(a.(*User), b.(*sample.User), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*sample.User)(nil), (*User)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_sample_User_To_v1alpha1_User(a.(*sample.User), b.(*User), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*UserList)(nil), (*sample.UserList)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1alpha1_UserList_To_sample_UserList(a.(*UserList), b.(*sample.UserList), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*sample.UserList)(nil), (*UserList)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_sample_UserList_To_v1alpha1_UserList(a.(*sample.UserList), b.(*UserList), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*UserSpec)(nil), (*sample.UserSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_v1alpha1_UserSpec_To_sample_UserSpec(a.(*UserSpec), b.(*sample.UserSpec), scope)
+	}); err != nil {
+		return err
+	}
+	if err := s.AddGeneratedConversionFunc((*sample.UserSpec)(nil), (*UserSpec)(nil), func(a, b interface{}, scope conversion.Scope) error {
+		return Convert_sample_UserSpec_To_v1alpha1_UserSpec(a.(*sample.UserSpec), b.(*UserSpec), scope)
+	}); err != nil {
+		return err
+	}
+	return nil
 }
 
 func autoConvert_v1alpha1_Test_To_sample_Test(in *Test, out *sample.Test, s conversion.Scope) error {

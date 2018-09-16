@@ -16,7 +16,7 @@ import (
 	time "time"
 
 	sample "github.com/seanchann/sample-apiserver/pkg/apis/sample"
-	clientset_internalversion "github.com/seanchann/sample-apiserver/pkg/client/clientset/internalversion"
+	clientsetinternalversion "github.com/seanchann/sample-apiserver/pkg/client/clientset/internalversion"
 	internalinterfaces "github.com/seanchann/sample-apiserver/pkg/client/informers/internalversion/internalinterfaces"
 	internalversion "github.com/seanchann/sample-apiserver/pkg/client/listers/sample/internalversion"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -41,14 +41,14 @@ type testInformer struct {
 // NewTestInformer constructs a new informer for Test type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewTestInformer(client clientset_internalversion.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
+func NewTestInformer(client clientsetinternalversion.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers) cache.SharedIndexInformer {
 	return NewFilteredTestInformer(client, namespace, resyncPeriod, indexers, nil)
 }
 
 // NewFilteredTestInformer constructs a new informer for Test type.
 // Always prefer using an informer factory to get a shared informer instead of getting an independent
 // one. This reduces memory footprint and number of connections to the server.
-func NewFilteredTestInformer(client clientset_internalversion.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
+func NewFilteredTestInformer(client clientsetinternalversion.Interface, namespace string, resyncPeriod time.Duration, indexers cache.Indexers, tweakListOptions internalinterfaces.TweakListOptionsFunc) cache.SharedIndexInformer {
 	return cache.NewSharedIndexInformer(
 		&cache.ListWatch{
 			ListFunc: func(options v1.ListOptions) (runtime.Object, error) {
@@ -70,7 +70,7 @@ func NewFilteredTestInformer(client clientset_internalversion.Interface, namespa
 	)
 }
 
-func (f *testInformer) defaultInformer(client clientset_internalversion.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
+func (f *testInformer) defaultInformer(client clientsetinternalversion.Interface, resyncPeriod time.Duration) cache.SharedIndexInformer {
 	return NewFilteredTestInformer(client, f.namespace, resyncPeriod, cache.Indexers{cache.NamespaceIndex: cache.MetaNamespaceIndexFunc}, f.tweakListOptions)
 }
 
