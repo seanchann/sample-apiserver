@@ -586,7 +586,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:3ec332710ef549cf0d49c6cbbe963d9c1cb607ac2415ae9993eddfb7fd9c8496"
+  digest = "1:eb239aadf9416434ae36154b7f3c116c50ef688aa0bb709d2d37f1dacaf71691"
   name = "github.com/seanchann/apimaster"
   packages = [
     "pkg/api/legacyscheme",
@@ -607,7 +607,7 @@
     "plugin/pkg/admission/deny",
   ]
   pruneopts = "UT"
-  revision = "7cd884b939391bf880cfdb02e3eeee4ce6195bbb"
+  revision = "9ef094346005124bcab6ff021640ae868dc240f3"
 
 [[projects]]
   digest = "1:645cabccbb4fa8aab25a956cbcbdf6a6845ca736b2c64e197ca7cbb9d210b939"
@@ -1207,7 +1207,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:157e4181c2da052734afd4c35abcb5aa28621872f1c86033da7026754494f02f"
+  digest = "1:9b0298b78c75b6ce14bab25bf3c812a522176b07cfdaf707ceef82677d65dba8"
   name = "k8s.io/code-generator"
   packages = [
     "cmd/client-gen/args",
@@ -1227,6 +1227,8 @@
     "cmd/lister-gen/args",
     "cmd/lister-gen/generators",
     "cmd/openapi-gen/args",
+    "cmd/register-gen/args",
+    "cmd/register-gen/generators",
     "pkg/util",
     "third_party/forked/golang/reflect",
   ]
@@ -1332,6 +1334,8 @@
     "k8s.io/code-generator/cmd/lister-gen/args",
     "k8s.io/code-generator/cmd/lister-gen/generators",
     "k8s.io/code-generator/cmd/openapi-gen/args",
+    "k8s.io/code-generator/cmd/register-gen/args",
+    "k8s.io/code-generator/cmd/register-gen/generators",
     "k8s.io/code-generator/pkg/util",
     "k8s.io/code-generator/third_party/forked/golang/reflect",
     "k8s.io/gengo/args",
