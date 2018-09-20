@@ -26,7 +26,7 @@ openssl pkcs12 -export -in ./client.crt -inkey ./client.key -out client.p12 -pas
 
 ```shell
 go run cmd/sample-apiserver/main.go --insecure-bind-address="127.0.0.1" --insecure-port=8080 \
-  --secure-port=8443 --tls-private-key-file="~/keys/ca.key" --tls-cert-file="~/keys/ca.crt" \
+  --secure-port=8443 --tls-private-key-file="./keys/ca.key" --tls-cert-file="./keys/ca.crt" \
   --enable-swagger-ui=true  --swagger-ui-file-path="./third_party/swagger-ui"
 ```
 

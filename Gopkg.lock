@@ -586,7 +586,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:eb239aadf9416434ae36154b7f3c116c50ef688aa0bb709d2d37f1dacaf71691"
+  digest = "1:02c1e24a0a4bfcfb6fc8091ef85f3ac5a1327e5c4fd46c0236265f25971a83c9"
   name = "github.com/seanchann/apimaster"
   packages = [
     "pkg/api/legacyscheme",
@@ -603,11 +603,12 @@
     "pkg/auth/authorizer/abac",
     "pkg/swaggerdoc",
     "pkg/swaggerdoc/options",
+    "pkg/util/async",
     "plugin/pkg/admission/admit",
     "plugin/pkg/admission/deny",
   ]
   pruneopts = "UT"
-  revision = "9ef094346005124bcab6ff021640ae868dc240f3"
+  revision = "729a0ab95f19a7aef779f11912302b63a0764dbc"
 
 [[projects]]
   digest = "1:645cabccbb4fa8aab25a956cbcbdf6a6845ca736b2c64e197ca7cbb9d210b939"
@@ -1288,6 +1289,7 @@
     "github.com/seanchann/apimaster/pkg/apiserver/server",
     "github.com/seanchann/apimaster/pkg/swaggerdoc",
     "github.com/seanchann/apimaster/pkg/swaggerdoc/options",
+    "github.com/seanchann/apimaster/pkg/util/async",
     "github.com/spf13/cobra",
     "github.com/spf13/pflag",
     "k8s.io/apimachinery/pkg/api/errors",
