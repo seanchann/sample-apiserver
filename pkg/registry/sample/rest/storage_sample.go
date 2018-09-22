@@ -20,7 +20,8 @@ import (
 
 	"github.com/seanchann/sample-apiserver/pkg/apis/sample"
 	sampleapiv1alpha1 "github.com/seanchann/sample-apiserver/pkg/apis/sample/v1alpha1"
-	teststore "github.com/seanchann/sample-apiserver/pkg/registry/sample/test/rest"
+	teststore "github.com/seanchann/sample-apiserver/pkg/registry/sample/test/storage"
+	userstore "github.com/seanchann/sample-apiserver/pkg/registry/sample/user/storage"
 )
 
 //RESTStorageProvider providers information needed to build RESTStorage for core.
@@ -43,9 +44,11 @@ func (p RESTStorageProvider) v1alpha1Storage(apiResourceConfigSource serverstora
 
 	// test
 	testStorage := teststore.NewREST()
+	userStorage := userstore.NewREST(restOptionsGetter)
 
 	restStorageMap := map[string]rest.Storage{
-		"test": testStorage,
+		"tests": testStorage,
+		"users": userStorage,
 	}
 
 	return restStorageMap

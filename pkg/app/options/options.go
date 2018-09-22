@@ -21,16 +21,18 @@ import (
 //ServerRunOptions astagent custom options
 type ServerRunOptions struct {
 	GenericServerRunOptions *genericoptions.ServerRunOptions
-	Etcd                    *genericoptions.EtcdOptions
-	SecureServing           *genericoptions.SecureServingOptionsWithLoopback
-	InsecureServing         *apioptions.InsecureServingOptions
-	Audit                   *genericoptions.AuditOptions
-	Features                *genericoptions.FeatureOptions
-	Admission               *apioptions.AdmissionOptions
-	Authentication          *apioptions.BuiltInAuthenticationOptions
-	Authorization           *apioptions.BuiltInAuthorizationOptions
-	StorageSerialization    *apioptions.StorageSerializationOptions
-	APIEnablement           *genericoptions.APIEnablementOptions
+	Mysql                   *apioptions.MysqlOptions
+	//hold etcd
+	Etcd                 *genericoptions.EtcdOptions
+	SecureServing        *genericoptions.SecureServingOptionsWithLoopback
+	InsecureServing      *apioptions.InsecureServingOptions
+	Audit                *genericoptions.AuditOptions
+	Features             *genericoptions.FeatureOptions
+	Admission            *apioptions.AdmissionOptions
+	Authentication       *apioptions.BuiltInAuthenticationOptions
+	Authorization        *apioptions.BuiltInAuthorizationOptions
+	StorageSerialization *apioptions.StorageSerializationOptions
+	APIEnablement        *genericoptions.APIEnablementOptions
 
 	//our custom options
 	SwaggerUIFilePath string
@@ -40,6 +42,7 @@ type ServerRunOptions struct {
 func NewServerRunOptions() *ServerRunOptions {
 	o := &ServerRunOptions{
 		GenericServerRunOptions: genericoptions.NewServerRunOptions(),
+		Mysql:                apioptions.NewMysqlOptions(storagebackend.NewDefaultConfig("mysql", nil)),
 		Etcd:                 genericoptions.NewEtcdOptions(storagebackend.NewDefaultConfig(apioptions.DefaultEtcdPathPrefix, nil)),
 		SecureServing:        apioptions.NewSecureServingOptions(),
 		InsecureServing:      apioptions.NewInsecureServingOptions(),
@@ -58,6 +61,7 @@ func NewServerRunOptions() *ServerRunOptions {
 // AddFlags adds flags for a specific APIServer to the specified FlagSet
 func (o *ServerRunOptions) AddFlags(fs *pflag.FlagSet) {
 	o.GenericServerRunOptions.AddUniversalFlags(fs)
+	o.Mysql.AddFlags(fs)
 	o.Etcd.AddFlags(fs)
 	o.SecureServing.AddFlags(fs)
 	o.InsecureServing.AddFlags(fs)
