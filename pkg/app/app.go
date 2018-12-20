@@ -26,8 +26,10 @@ import (
 	"github.com/seanchann/apimaster/pkg/apiserver"
 	insecureserver "github.com/seanchann/apimaster/pkg/apiserver/server"
 
+	"k8s.io/apimachinery/pkg/runtime/schema"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	genericapiserver "k8s.io/apiserver/pkg/server"
+	apiserverstorage "k8s.io/apiserver/pkg/server/storage"
 	clientgoinformers "k8s.io/client-go/informers"
 	clientgoclientset "k8s.io/client-go/kubernetes"
 )
@@ -151,13 +153,13 @@ func CreateAPIServerConfig(s completedServerRunOptions) (
 	genericConfig.SwaggerConfig = genericapiserver.DefaultSwaggerConfig()
 	genericConfig.SwaggerConfig.SwaggerFilePath = s.SwaggerUIFilePath
 
-	// storageFactory, lastErr := BuildStorageFactory(s, genericConfig.MergedResourceConfig)
-	// if lastErr != nil {
-	// 	return
-	// }
-	// if lastErr = s.Etcd.ApplyWithStorageFactoryTo(storageFactory, genericConfig); lastErr != nil {
-	// 	return
-	// }
+	storageFactory, lastErr := BuildStorageFactory(s.ServerRunOptions, genericConfig.MergedResourceConfig)
+	if lastErr != nil {
+		return
+	}
+	if lastErr = s.Mysql.ApplyWithStorageFactoryTo(storageFactory, genericConfig); lastErr != nil {
+		return
+	}
 
 	// Use protobufs for self-communication.
 	// Since not every generic apiserver has to support protobufs, we
@@ -203,4 +205,26 @@ func Complete(s *options.ServerRunOptions) (completedServerRunOptions, error) {
 	var options completedServerRunOptions
 	options.ServerRunOptions = s
 	return options, nil
+}
+
+// BuildStorageFactory constructs the storage factory. If encryption at rest is used, it expects
+// all supported KMS plugins to be registered in the KMS plugin registry before being called.
+func BuildStorageFactory(s *options.ServerRunOptions, apiResourceConfig *apiserverstorage.ResourceConfig) (*apiserverstorage.DefaultStorageFactory, error) {
+	storageGroupsToEncodingVersion, err := s.StorageSerialization.StorageGroupsToEncodingVersion()
+	if err != nil {
+		return nil, fmt.Errorf("error generating storage version map: %s", err)
+	}
+	storageFactory, err := apiserver.NewStorageFactory(
+		s.Mysql.StorageConfig, s.Mysql.DefaultStorageMediaType, legacyscheme.Codecs,
+		apiserverstorage.NewDefaultResourceEncodingConfig(legacyscheme.Scheme), storageGroupsToEncodingVersion,
+		// The list includes resources that need to be stored in a different
+		// group version than other resources in the groups.
+		// FIXME (soltysh): this GroupVersionResource override should be configurable
+		[]schema.GroupVersionResource{},
+		apiResourceConfig)
+	if err != nil {
+		return nil, fmt.Errorf("error in initializing storage factory: %s", err)
+	}
+
+	return storageFactory, nil
 }

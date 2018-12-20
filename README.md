@@ -27,7 +27,8 @@ openssl pkcs12 -export -in ./client.crt -inkey ./client.key -out client.p12 -pas
 ```shell
 go run cmd/sample-apiserver/main.go --insecure-bind-address="127.0.0.1" --insecure-port=8080 \
   --secure-port=8443 --tls-private-key-file="./keys/ca.key" --tls-cert-file="./keys/ca.crt" \
-  --enable-swagger-ui=true  --swagger-ui-file-path="./third_party/swagger-ui"
+  --enable-swagger-ui=true  --swagger-ui-file-path="./third_party/swagger-ui" \
+  --mysql-servers="root:123456@tcp(127.0.0.1:3306)/sample"
 ```
 
 至此，你已经创建了一个`k8s`风格的API Server, 访问`127.0.0.1:8080`

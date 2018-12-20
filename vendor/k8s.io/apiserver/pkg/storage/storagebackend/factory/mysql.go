@@ -1,12 +1,12 @@
 package factory
 
 import (
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/golang/glog"
+	dbmysql "github.com/jinzhu/gorm"
 	"k8s.io/apiserver/pkg/storage"
 	"k8s.io/apiserver/pkg/storage/mysqls/mysql"
 	"k8s.io/apiserver/pkg/storage/storagebackend"
-
-	_ "github.com/go-sql-driver/mysql"
-	dbmysql "github.com/jinzhu/gorm"
 )
 
 //connectionStr: user:password@tcp(host:port)/dbname
@@ -25,6 +25,8 @@ func newMysqlClient(connectionStr string) (*dbmysql.DB, error) {
 
 func newMysqlStorage(c storagebackend.Config) (storage.Interface, DestroyFunc, error) {
 	endpoints := c.Mysql.ServerList
+
+	glog.Infof("new mysql conf %+v", c)
 
 	client, err := newMysqlClient(endpoints[0])
 	if err != nil {

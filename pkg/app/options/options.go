@@ -11,9 +11,8 @@ See docs/ for more information about the  project.
 package options
 
 import (
-	"github.com/spf13/pflag"
-
 	apioptions "github.com/seanchann/apimaster/pkg/apiserver/options"
+	"github.com/spf13/pflag"
 	genericoptions "k8s.io/apiserver/pkg/server/options"
 	"k8s.io/apiserver/pkg/storage/storagebackend"
 )
@@ -23,7 +22,7 @@ type ServerRunOptions struct {
 	GenericServerRunOptions *genericoptions.ServerRunOptions
 	Mysql                   *apioptions.MysqlOptions
 	//hold etcd
-	Etcd                 *genericoptions.EtcdOptions
+	//Etcd                 *genericoptions.EtcdOptions
 	SecureServing        *genericoptions.SecureServingOptionsWithLoopback
 	InsecureServing      *apioptions.InsecureServingOptions
 	Audit                *genericoptions.AuditOptions
@@ -42,8 +41,8 @@ type ServerRunOptions struct {
 func NewServerRunOptions() *ServerRunOptions {
 	o := &ServerRunOptions{
 		GenericServerRunOptions: genericoptions.NewServerRunOptions(),
-		Mysql:                apioptions.NewMysqlOptions(storagebackend.NewDefaultConfig("mysql", nil)),
-		Etcd:                 genericoptions.NewEtcdOptions(storagebackend.NewDefaultConfig(apioptions.DefaultEtcdPathPrefix, nil)),
+		Mysql:                   apioptions.NewMysqlOptions(storagebackend.NewDefaultConfig("mysql", nil)),
+		//Etcd:                    genericoptions.NewEtcdOptions(storagebackend.NewDefaultConfig(apioptions.DefaultEtcdPathPrefix, nil)),
 		SecureServing:        apioptions.NewSecureServingOptions(),
 		InsecureServing:      apioptions.NewInsecureServingOptions(),
 		Audit:                genericoptions.NewAuditOptions(),
@@ -62,7 +61,7 @@ func NewServerRunOptions() *ServerRunOptions {
 func (o *ServerRunOptions) AddFlags(fs *pflag.FlagSet) {
 	o.GenericServerRunOptions.AddUniversalFlags(fs)
 	o.Mysql.AddFlags(fs)
-	o.Etcd.AddFlags(fs)
+	//o.Etcd.AddFlags(fs)
 	o.SecureServing.AddFlags(fs)
 	o.InsecureServing.AddFlags(fs)
 	o.InsecureServing.AddDeprecatedFlags(fs)

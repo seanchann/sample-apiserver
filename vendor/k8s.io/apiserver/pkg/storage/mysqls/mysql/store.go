@@ -15,16 +15,14 @@ import (
 	"fmt"
 	"reflect"
 
-	"k8s.io/apiserver/pkg/storage/mysqls"
-
+	"github.com/golang/glog"
+	dbmysql "github.com/jinzhu/gorm"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/apiserver/pkg/storage"
-
-	"github.com/golang/glog"
-	dbmysql "github.com/jinzhu/gorm"
+	"k8s.io/apiserver/pkg/storage/mysqls"
 )
 
 const (
@@ -76,6 +74,10 @@ func (s *store) Versioner() storage.Versioner {
 }
 
 func (s *store) Create(ctx context.Context, key string, obj, out runtime.Object, ttl uint64) error {
+
+	resource, name := ParseKey(key)
+	glog.Infof("create with key %s r:%s n:%s", key, resource, name)
+
 	err := s.GetResourceWithKey(ctx, key, out, true)
 	if err != nil {
 		return err

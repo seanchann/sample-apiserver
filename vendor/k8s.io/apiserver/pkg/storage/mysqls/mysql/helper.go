@@ -18,11 +18,10 @@ import (
 	"reflect"
 	"strings"
 
+	"github.com/golang/glog"
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/runtime"
-
-	"github.com/golang/glog"
 )
 
 func ScanRows(rows *sql.Rows, t *Table, obj runtime.Object) ([]*RowResult, error) {
@@ -72,6 +71,22 @@ func GetActualResourceKey(key string) string {
 		actual = key
 	}
 	return actual
+}
+
+//ParseKey assume has key /resource/name or /resource
+func ParseKey(key string) (resource, name string) {
+	keyArr := strings.Split(key, "/")
+
+	glog.Infof("key arr %v %v %v", keyArr, len(keyArr), keyArr[0])
+	if len(keyArr) > 1 {
+		resource = keyArr[1]
+	}
+
+	if len(keyArr) > 1 {
+		name = keyArr[2]
+	}
+
+	return
 }
 
 // WithTable returns a copy of parent in which the value associated with tablecontextKey is val.
