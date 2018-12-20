@@ -13,6 +13,8 @@ See docs/ for more information about the  project.
 package internalversion
 
 import (
+	"time"
+
 	sample "github.com/seanchann/sample-apiserver/pkg/apis/sample"
 	scheme "github.com/seanchann/sample-apiserver/pkg/client/clientset/internalversion/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -69,11 +71,16 @@ func (c *tests) Get(name string, options v1.GetOptions) (result *sample.Test, er
 
 // List takes label and field selectors, and returns the list of Tests that match those selectors.
 func (c *tests) List(opts v1.ListOptions) (result *sample.TestList, err error) {
+	var timeout time.Duration
+	if opts.TimeoutSeconds != nil {
+		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
+	}
 	result = &sample.TestList{}
 	err = c.client.Get().
 		Namespace(c.ns).
 		Resource("tests").
 		VersionedParams(&opts, scheme.ParameterCodec).
+		Timeout(timeout).
 		Do().
 		Into(result)
 	return
@@ -81,11 +88,16 @@ func (c *tests) List(opts v1.ListOptions) (result *sample.TestList, err error) {
 
 // Watch returns a watch.Interface that watches the requested tests.
 func (c *tests) Watch(opts v1.ListOptions) (watch.Interface, error) {
+	var timeout time.Duration
+	if opts.TimeoutSeconds != nil {
+		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
+	}
 	opts.Watch = true
 	return c.client.Get().
 		Namespace(c.ns).
 		Resource("tests").
 		VersionedParams(&opts, scheme.ParameterCodec).
+		Timeout(timeout).
 		Watch()
 }
 
@@ -127,10 +139,15 @@ func (c *tests) Delete(name string, options *v1.DeleteOptions) error {
 
 // DeleteCollection deletes a collection of objects.
 func (c *tests) DeleteCollection(options *v1.DeleteOptions, listOptions v1.ListOptions) error {
+	var timeout time.Duration
+	if listOptions.TimeoutSeconds != nil {
+		timeout = time.Duration(*listOptions.TimeoutSeconds) * time.Second
+	}
 	return c.client.Delete().
 		Namespace(c.ns).
 		Resource("tests").
 		VersionedParams(&listOptions, scheme.ParameterCodec).
+		Timeout(timeout).
 		Body(options).
 		Do().
 		Error()
