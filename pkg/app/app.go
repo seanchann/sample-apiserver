@@ -14,6 +14,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/go-openapi/spec"
 	"github.com/spf13/cobra"
 
 	"github.com/seanchann/sample-apiserver/pkg/app/options"
@@ -28,6 +29,8 @@ import (
 
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
+	"k8s.io/apiserver/pkg/authentication/authenticator"
+	"k8s.io/apiserver/pkg/authorization/authorizer"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	apiserverstorage "k8s.io/apiserver/pkg/server/storage"
 	clientgoinformers "k8s.io/client-go/informers"
@@ -183,6 +186,18 @@ func CreateAPIServerConfig(s completedServerRunOptions) (
 	}
 	versionedInformers = clientgoinformers.NewSharedInformerFactory(clientgoExternalClient, genericConfig.LoopbackClientConfig.Timeout)
 
+	genericConfig.Authentication.Authenticator, _, err = BuildAuthenticator(s.ServerRunOptions, clientgoExternalClient, versionedInformers)
+	if err != nil {
+		lastErr = fmt.Errorf("invalid authentication config: %v", err)
+		return
+	}
+
+	genericConfig.Authorization.Authorizer, genericConfig.RuleResolver, err = BuildAuthorizer(s.ServerRunOptions, versionedInformers)
+	if err != nil {
+		lastErr = fmt.Errorf("invalid authorization config: %v", err)
+		return
+	}
+
 	config = &apiserver.Config{
 		GenericConfig: genericConfig,
 		ExtraConfig: apiserver.ExtraConfig{
@@ -192,6 +207,18 @@ func CreateAPIServerConfig(s completedServerRunOptions) (
 	}
 
 	return
+}
+
+// BuildAuthenticator constructs the authenticator
+func BuildAuthenticator(s *options.ServerRunOptions, extclient clientgoclientset.Interface, versionedInformer clientgoinformers.SharedInformerFactory) (authenticator.Request, *spec.SecurityDefinitions, error) {
+	authenticatorConfig := s.Authentication.ToAuthenticationConfig()
+	return authenticatorConfig.New()
+}
+
+// BuildAuthorizer constructs the authorizer
+func BuildAuthorizer(s *options.ServerRunOptions, versionedInformers clientgoinformers.SharedInformerFactory) (authorizer.Authorizer, authorizer.RuleResolver, error) {
+	authorizationConfig := s.Authorization.ToAuthorizationConfig()
+	return authorizationConfig.New()
 }
 
 // completedServerRunOptions is a private wrapper that enforces a call of Complete() before Run can be invoked.
